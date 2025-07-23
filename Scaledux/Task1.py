@@ -8,7 +8,6 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 df = pd.read_csv(r'C:\Users\jasva\Downloads\Scaledux\Task 1 Dataset\Startup_Scoring_Dataset.csv')
 
-# 2. Preprocessing & Normalization
 def min_max(col):
     return (col - col.min()) / (col.max() - col.min())
 
@@ -88,7 +87,7 @@ plt.close()
 
 X = df_norm[features]
 y = df_norm['score']
-model = LinearRegression()
+model = LinearRegression()  # ML MODEL
 model.fit(X, y)
 ml_pred = model.predict(X)
 rmse = mean_squared_error(y, ml_pred, squared=False)
