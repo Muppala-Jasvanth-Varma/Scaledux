@@ -1,60 +1,96 @@
-# Scaledux
-Built a Startup Evaluation Engine that scores each startup from 0 to 100, like a credit score, based on their business health.
+# Scaledux – Startup Evaluation Engine
 
-1. Loaded the Dataset
-   Read the CSV file containing details of 100 startups.
-   Each startup had features like:
-     Team experience
-     Market size
-     Number of users
-     Burn rate (monthly expenses)
-     Funds raised
-     Company valuation
+**Scaledux** is a lightweight engine that scores startups on a scale from 0 to 100 (like a credit score) to assess their business health based on key operational and financial metrics.
 
-2. Preprocessed the Data
-   Used Min-Max normalization to scale every numeric column to a 0 to 1 range.
-  
-  Why? So that one feature (like valuation) doesn't overpower others just because it has larger numbers.
+---
 
-Important Logic Applied:
+## 1. Dataset Overview
 
-  For positive indicators like team experience, market size, users, funding, and valuation, higher is better — so kept them as is.
-  
-  For burn rate, higher is worse — so inverted it after normalization using 1 - normalized_value.
+The dataset contains details of **100 startups** with the following features:
 
-3. Scoring Logic
-  Created a custom score using a weighted average.
-  Here’s how decided the weights (importance) of each feature:
-    Feature	Weight (%)	Reason
-    Team Experience	15%	Strong team = better execution potential
-    Market Size	15%	Bigger market = more room to grow
-    Monthly Active Users	20%	Shows traction and demand
-    Burn Rate (inverted)	10%	Less burn = better efficiency
-    Funds Raised	20%	Indicates investor trust and runway
-    Valuation	20%	Reflects market confidence and business potential
+* **Team Experience** – Skill level and background of the founding team.
+* **Market Size** – Estimated total addressable market.
+* **Monthly Active Users** – Number of active platform users.
+* **Burn Rate** – Monthly expenditure.
+* **Funds Raised** – Total external capital received.
+* **Company Valuation** – Estimated market worth of the company.
 
-Then calculated the score out of 100 using this weighted formula.
+---
 
-4. Ranking the Startups
-  Sorted all startups by their final score.
+## 2. Data Preprocessing
 
-  Extracted:
+* Applied **Min-Max normalization** to scale all numeric features between 0 and 1.
 
-    Top 10 performers → healthiest startups
-    
-    Bottom 10 performers → underperforming or risky ones
+### Rationale:
 
-5. Interpreting Scores 
-  Startup X (Top Scorer):
-  Had high user base, strong team, raised good funds, and efficient burn rate → hence, high score (~95+)
-  
-  Startup Y (Low Scorer):
-  Had low users, high burn rate, little funding → scored low (~30)
-6. ML Model 
-    Trained a basic regression model using to predict the health score of new startups automatically.
+* Ensures fairness among features with varying scales (e.g., valuation vs. users).
+* Prevents larger numerical features from dominating smaller ones in model training and scoring.
 
-7. Visualization
-  Also added visual insights:
-    Bar chart showing all startups' scores
-   Correlation heatmap to see which features are related
-   Histogram to see how scores are spread across all startups
+### Special Handling:
+
+* **Positive Indicators** (higher is better):
+
+  * Team Experience, Market Size, Users, Funds Raised, Valuation → kept as-is after normalization.
+* **Negative Indicator** (lower is better):
+
+  * Burn Rate → inverted using `1 - normalized_value` after scaling.
+
+---
+
+## 3. Scoring Logic
+
+Each startup is assigned a score out of 100 using a **weighted average** of its normalized features.
+
+| Feature              | Weight (%) | Rationale                                     |
+| -------------------- | ---------- | --------------------------------------------- |
+| Team Experience      | 15%        | Strong teams are more likely to execute well  |
+| Market Size          | 15%        | Larger markets allow more growth opportunity  |
+| Monthly Active Users | 20%        | Indicates product traction and demand         |
+| Burn Rate (inverted) | 10%        | Lower burn implies better financial health    |
+| Funds Raised         | 20%        | Shows investor confidence and runway          |
+| Company Valuation    | 20%        | Reflects market perception and growth outlook |
+
+---
+
+## 4. Startup Ranking
+
+* Startups are ranked based on their final scores.
+* Identified:
+
+  * **Top 10 Startups**: Strongest performers across all dimensions.
+  * **Bottom 10 Startups**: Likely to be at risk or underperforming.
+
+---
+
+## 5. Score Interpretation
+
+* **High-Scoring Example (\~95+)**:
+  Startup with strong team, high user engagement, good funding, and efficient spending.
+
+* **Low-Scoring Example (\~30)**:
+  Startup with limited users, high burn, and little funding support.
+
+---
+
+## 6. Machine Learning Integration
+
+* Trained a **regression model** to predict health scores of new or unseen startups using the same features.
+* Used libraries like **scikit-learn** for implementation.
+
+---
+
+## 7. Visualization and Insights
+
+Added visual components to support interpretation:
+
+* **Bar Chart**: Displays scores of all startups.
+* **Correlation Heatmap**: Highlights relationships between features.
+* **Score Distribution Histogram**: Shows how startup scores are spread across the dataset.
+
+---
+
+## Tools & Libraries Used
+
+* `Pandas`, `NumPy` – for data handling
+* `scikit-learn` – for preprocessing and regression modeling
+* `Matplotlib`, `Seaborn` – for visualizations
